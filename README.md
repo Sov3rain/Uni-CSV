@@ -21,7 +21,7 @@ https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv
 You can alternatively pin a specific version:
 
 ```
-https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv#v1.0.0
+https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv#1.0.0
 ```
 
 ## Usage

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using static Sov3rain.CSVParser.Delimiter;
@@ -27,17 +28,19 @@ namespace Sov3rain
         /// <param name="path">CSV file path.</param>
         /// <param name="delimiter">Delimiter.</param>
         /// <param name="header">Does this CSV file have a header row</param>
+        /// <param name="removeHeader">Remove header row from the result</param>
         /// <param name="encoding">Type of text encoding. (default UTF-8)</param>
         public static List<List<string>> ParseFromPath(
             string path,
             Delimiter delimiter = Auto,
             bool header = true,
+            bool removeHeader = true,
             Encoding encoding = null)
         {
             encoding ??= Encoding.UTF8;
             var data = File.ReadAllText(path, encoding);
 
-            return ParseFromString(data, header, delimiter);
+            return ParseFromString(data, header, removeHeader, delimiter);
         }
 
         /// <summary>
@@ -64,19 +67,30 @@ namespace Sov3rain
         /// <param name="delimiter">Delimiter.</param>
         public static IEnumerable<T> ParseFromString<T>(string data, Delimiter delimiter = Auto)
         {
-            var result = ParseFromString(data, true, delimiter);
-            var properties = typeof(T).GetProperties();
+            var result = ParseFromString(data, true, false, delimiter);
 
-            foreach (var row in result)
+            if (result.Count <= 1) // If we only have a header row or empty data
+                yield break;
+
+            var headers = result[0];
+            var properties = typeof(T).GetProperties().ToDictionary(
+                prop => prop.GetCustomAttribute<CsvColumnAttribute>()?.Name ?? prop.Name,
+                prop => prop
+            );
+
+            // Start from index 1 to skip the header row
+            for (var i = 1; i < result.Count; i++)
             {
+                var row = result[i];
                 T obj = Activator.CreateInstance<T>();
 
-                for (var i = 0; i < properties.Length; i++)
+                for (int j = 0; j < headers.Count && j < row.Count; j++)
                 {
-                    var property = properties[i];
-                    var value = ConvertValue(row[i], property.PropertyType);
-
-                    property.SetValue(obj, value);
+                    if (properties.TryGetValue(headers[j], out PropertyInfo prop))
+                    {
+                        var value = ConvertValue(row[j], prop.PropertyType);
+                        prop.SetValue(obj, value);
+                    }
                 }
 
                 yield return obj;
@@ -88,10 +102,12 @@ namespace Sov3rain
         /// </summary>
         /// <param name="data">CSV string</param>
         /// <param name="header">Does this CSV file have a header row</param>
+        /// <param name="removeHeader">Remove header row from the result</param>
         /// <param name="delimiter">Delimiter.</param>
         public static List<List<string>> ParseFromString(
             string data,
             bool header = true,
+            bool removeHeader = true,
             Delimiter delimiter = Auto)
         {
             if (delimiter == Auto)
@@ -176,9 +192,14 @@ namespace Sov3rain
                 AddRow(sheet, ref row);
             }
 
-            if (header && sheet.Count > 0)
+            if (header && removeHeader && sheet.Count > 0)
             {
                 sheet.RemoveAt(0);
+            }
+
+            if (header && !removeHeader && sheet.Count == 1)
+            {
+                sheet.Clear();
             }
 
             return sheet;
@@ -251,6 +272,14 @@ namespace Sov3rain
         private static object ConvertValue(string value, Type targetType)
         {
             if (string.IsNullOrWhiteSpace(value))
+            {
+                if (targetType == typeof(string))
+                    return string.Empty;
+
+                return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
+            }
+
+            if (string.IsNullOrWhiteSpace(value))
                 return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
 
             if (targetType == typeof(string))
@@ -273,5 +302,16 @@ namespace Sov3rain
 
             throw new NotSupportedException($"Type {targetType} is not supported for conversion.");
         }
+    }
+}
+
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+public class CsvColumnAttribute : Attribute
+{
+    public string Name { get; }
+
+    public CsvColumnAttribute(string name)
+    {
+        Name = name;
     }
 }

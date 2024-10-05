@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Sov3rain;
 using UnityEngine;
 
@@ -7,10 +8,26 @@ public class CSVExample : MonoBehaviour
     [SerializeField] private TextAsset _usernamesCSV;
     [SerializeField] private TextAsset _csvWithEmptyLines;
 
+    public class User
+    {
+        public string Username { get; set; }
+
+        [CsvColumn(" Identifier")]
+        public int Identifier { get; set; }
+
+        [CsvColumn("First name")]
+        public string FirstName { get; set; }
+
+        [CsvColumn("Last name")]
+        public string LastName { get; set; }
+    }
+
     private void Start()
     {
         LoadCSV(_usernamesCSV);
         LoadCSV(_csvWithEmptyLines);
+
+        var users = CSVParser.ParseFromString<User>(_usernamesCSV.text).ToList();
     }
 
     private void LoadCSV(TextAsset usernamesCsv)
@@ -26,7 +43,7 @@ public class CSVExample : MonoBehaviour
                 string rowContent = string.Join(", ", row);
                 Debug.Log($"Row: {rowContent}");
             }
-            
+
             Debug.Log("====================================");
         }
         catch (Exception e)

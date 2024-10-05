@@ -1,4 +1,10 @@
-# Uni-CSV | CSV Parser for Unity
+# Uni-CSV
+
+## Overview
+
+The **CSV Parser for Unity** is a lightweight and efficient CSV parsing utility designed specifically for Unity projects. It allows easy and flexible parsing of CSV data from both files and strings, supporting multiple delimiter types (comma, tab, semicolon, pipe) and handling common edge cases like quoted fields and multiline data.
+
+This parser is ideal for use in Unity projects where you need to read and process data from CSV files, such as game configurations, localization files, or dynamic content loading.
 
 ## Supported Unity versions
 
@@ -11,7 +17,9 @@ This package can be installed with the built-in Unity Package Manager. Open the 
 ```
 https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv
 ```
+
 You can alternatively pin a specific version:
+
 ```
 https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv#v1.0.0
 ```
@@ -20,49 +28,59 @@ https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv#v1.0.0
 
 ### Methods
 
-This returns CSV data as `List<List<string>>`.
+All methods returns CSV data as `List<List<string>>`.
+
+You can parse a string using:
 
 ```c#
-CSVParser.ParseFromString(string data)
+CSVParser.ParseFromString(
+    string data, 
+    bool header = true, 
+    Delimiter delimiter = Delimiter.Auto)
 ```
 
-or
+or a file using:
 
 ```c#
-CSVParser.ParseFromPath(string path, Encoding encoding = null)
+CSVParser.ParseFromPath(
+    string path,
+    Delimiter delimiter = Delimiter.Auto,
+    bool header = true,
+    Encoding encoding = null)
 ```
+
+Both methods have the `header` parameter set to `true` by default. If your CSV file does not contains a header row, set this parameter to `false`.
 
 ### Examples
 
 ```c#
 var sheet = CSVParser.ParseFromString(csvString);
 
-var styled = new StringBuilder();
 foreach (var row in sheet)
 {
-    styled.Append("| ");
-
-    foreach (var cell in row)
-    {
-        styled.Append(cell);
-        styled.Append(" | ");
-    }
-
-    styled.AppendLine();
+    Debug.Log(string.Join(", ", row));
 }
-
-Debug.Log(styled.ToString());
 ```
 
 ## Specs
 
 Compliant with [RFC 4180](http://www.ietf.org/rfc/rfc4180.txt).
 
-- Correctly parse new lines, commas, quotation marks inside cell.
-- Escaped double quotes.
-- Some encoding types. (default UTF-8)
+- Delimiter auto detection (`,`, `;`, `\t` and `|` supported).
+- Correctly parse new lines, commas and quotation marks inside cell.
+- Escape double quotes.
+- Support for some encoding types (default is UTF-8).
 
-## Beta
+## Roadmap
 
-- Tab delimiter support
 - Async loading
+- Streaming loading
+- CSV Writing
+
+## Tests
+
+This package has a set of tests that can be run with the [Unity Test Framework](https://docs.unity3d.com/Packages/com.unity.test-framework@1.4/manual/index.html).
+
+## Acknowledgment
+
+This package is freely inspired by [GitHub - yutokun/CSV-Parser: CSV Parser for C# without any dependency (on recent platforms).](https://github.com/yutokun/CSV-Parser)

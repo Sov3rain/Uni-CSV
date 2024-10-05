@@ -4,8 +4,8 @@
   "displayName": "Uni-CSV",
   "description": "Robust CSV parser for Unity",
   "unity": "2019.2",
-  "documentationUrl": "",
-  "changelogUrl": "",
+  "documentationUrl": "https://github.com/Sov3rain/Uni-CSV/blob/main/README.md",
+  "changelogUrl": "https://github.com/Sov3rain/Uni-CSV/blob/main/CHANGELOG.md",
   "licensesUrl": "",
   "author": {
     "name": "Sov3rain",

@@ -24,13 +24,13 @@ public static class CSVParser
     /// </summary>
     /// <param name="path">CSV file path.</param>
     /// <param name="delimiter">Delimiter.</param>
-    /// <param name="hasHeader">Does this CSV file have a header row</param>
+    /// <param name="header">Does this CSV file have a header row</param>
     /// <param name="encoding">Type of text encoding. (default UTF-8)</param>
     /// <returns>Nested list that CSV parsed.</returns>
     public static List<List<string>> ParseFromPath(
         string path,
         Delimiter delimiter = Auto,
-        bool hasHeader = true,
+        bool header = true,
         Encoding encoding = null)
     {
         encoding ??= Encoding.UTF8;
@@ -41,19 +41,19 @@ public static class CSVParser
             delimiter = DetectDelimiterFromContent(data);
         }
 
-        return Parse(data, delimiter, hasHeader);
+        return Parse(data, delimiter, header);
     }
 
     /// <summary>
     /// Load CSV data from string.
     /// </summary>
     /// <param name="data">CSV string</param>
-    /// <param name="hasHeader">Does this CSV file have a header row</param>
+    /// <param name="header">Does this CSV file have a header row</param>
     /// <param name="delimiter">Delimiter.</param>
     /// <returns>Nested list that CSV parsed.</returns>
     public static List<List<string>> ParseFromString(
         string data,
-        bool hasHeader = true,
+        bool header = true,
         Delimiter delimiter = Auto)
     {
         if (delimiter == Auto)
@@ -61,7 +61,7 @@ public static class CSVParser
             delimiter = DetectDelimiterFromContent(data);
         }
 
-        return Parse(data, delimiter, hasHeader);
+        return Parse(data, delimiter, header);
     }
 
     private static Delimiter DetectDelimiterFromContent(string content)

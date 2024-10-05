@@ -9,7 +9,11 @@ This package runs on 2019.2 or later.
 This package can be installed with the built-in Unity Package Manager. Open the UPM window, click on the `+` icon, choose **Add package from git URL...** and paste this URL:
 
 ```
-https://github.example.com/myuser/myrepo.git?path=/Assets/uni-csv
+https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv
+```
+You can alternatively pin a specific version:
+```
+https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv#v1.0.0
 ```
 
 ## Usage
@@ -19,19 +23,19 @@ https://github.example.com/myuser/myrepo.git?path=/Assets/uni-csv
 This returns CSV data as `List<List<string>>`.
 
 ```c#
-CSVParser.LoadFromString(string data)  
+CSVParser.ParseFromString(string data)
 ```
 
 or
 
 ```c#
-CSVParser.LoadFromPath(string path, Encoding encoding = null)
+CSVParser.ParseFromPath(string path, Encoding encoding = null)
 ```
 
 ### Examples
 
 ```c#
-var sheet = CSVParser.LoadFromString(csvString);
+var sheet = CSVParser.ParseFromString(csvString);
 
 var styled = new StringBuilder();
 foreach (var row in sheet)
@@ -47,8 +51,7 @@ foreach (var row in sheet)
     styled.AppendLine();
 }
 
-Debug.Log(styled.ToString());         // Unity
-Console.WriteLine(styled.ToString()); // C# 
+Debug.Log(styled.ToString());
 ```
 
 ## Specs
@@ -62,32 +65,4 @@ Compliant with [RFC 4180](http://www.ietf.org/rfc/rfc4180.txt).
 ## Beta
 
 - Tab delimiter support
-
 - Async loading
-
-## Development
-
-The repository contains multiple types of newline code. Run `git config core.autocrlf false` in your local repository.
-
-## Why this repo has multiple Unity Examples?
-
-One of the reasons is to check operation in different Unity versions. Another one is to build .unitypackage with CI.
-
-Unity changes a lot between their Tech Streams. It leads different requisites / dependency to the parser. Affected changes below.
-
-| Versions          | Difference                                     |
-| ----------------- | ---------------------------------------------- |
-| 2019.1 and 2019.2 | Has Scripting Runtime Version selector or not. |
-| 2021.1 and 2021.2 | Requires additional DLLs or not.               |
-
-## License
-
-### Unique part of the repository
-
-[CC0](https://creativecommons.org/publicdomain/zero/1.0/) or [Public Domain](LICENSE)
-
-### .NET Runtimes (included in the .unitypackage for old Unity)
-
-[The MIT License](https://github.com/dotnet/runtime/blob/main/LICENSE.TXT)
-
-Copyright (c) .NET Foundation and Contributors

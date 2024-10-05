@@ -51,6 +51,23 @@ CSVParser.ParseFromPath(
 
 Both methods have the `header` parameter set to `true` by default. If your CSV file does not contains a header row, set this parameter to `false`.
 
+You can map your CSV to a concrete type using the generic methods. You'll get back a `IEnumerator<T>`:
+
+```c#
+CSVParser.ParseFromString<T>(
+    string data,
+    Delimiter delimiter = Delimiter.Auto)
+```
+
+```c#
+CSVParser.ParseFromPath<T>(
+    string path,
+    Delimiter delimiter = Delimiter.Auto,
+    Encoding = null)
+```
+
+> Note that when using the generic methods, the input string or file **must** have a header row.
+
 ### Examples
 
 ```c#
@@ -70,6 +87,7 @@ Compliant with [RFC 4180](http://www.ietf.org/rfc/rfc4180.txt).
 - Correctly parse new lines, commas and quotation marks inside cell.
 - Escape double quotes.
 - Support for some encoding types (default is UTF-8).
+- Correctly escapes empty lines and empty content lines.
 
 ## Roadmap
 

@@ -2,7 +2,7 @@
   "name": "com.sov3rain.uni-csv",
   "version": "1.0.0",
   "displayName": "Uni-CSV",
-  "description": "Robust CSV parser for Unity",
+  "description": "Lightweight and efficient CSV parser without dependencies.",
   "unity": "2019.2",
   "documentationUrl": "https://github.com/Sov3rain/Uni-CSV/blob/main/README.md",
   "changelogUrl": "https://github.com/Sov3rain/Uni-CSV/blob/main/CHANGELOG.md",

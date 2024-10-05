@@ -1,0 +1,14 @@
+﻿{
+  "name": "com.sov3rain.uni-csv",
+  "version": "1.0.0",
+  "displayName": "Uni-CSV",
+  "description": "Robust CSV parser for Unity",
+  "unity": "2019.2",
+  "documentationUrl": "",
+  "changelogUrl": "",
+  "licensesUrl": "",
+  "author": {
+    "name": "Sov3rain",
+    "url": "https://samuelduval.fr"
+  }
+}

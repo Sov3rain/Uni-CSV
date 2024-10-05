@@ -318,7 +318,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1852378079}
-  - component: {fileID: 1852378078}
+  - component: {fileID: 1852378080}
   m_Layer: 0
   m_Name: CSV Example
   m_TagString: Untagged
@@ -326,19 +326,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1852378078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1852378077}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 732cd49ded9b43378de23b9a94c4dcfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _usernamesCSV: {fileID: 4900000, guid: 1b74a748156a43340a583b8cc4d17aaf, type: 3}
 --- !u!4 &1852378079
 Transform:
   m_ObjectHideFlags: 0
@@ -354,6 +341,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1852378080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852378077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 732cd49ded9b43378de23b9a94c4dcfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _usernamesCSV: {fileID: 4900000, guid: 1b74a748156a43340a583b8cc4d17aaf, type: 3}
+  _csvWithEmptyLines: {fileID: 4900000, guid: 1c8eb563eddca354d959f328a58e9071, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

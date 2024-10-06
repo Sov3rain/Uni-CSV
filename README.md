@@ -99,7 +99,7 @@ foreach (User user in users)
 
 If the names in the header row don’t match your property names or contain reserved or invalid characters, you can manually map the property to the correct header using the `[CsvColumn(name)]` attribute:
 
-```ag-0-1i9gpriotag-1-1i9gpriotc#
+```c#
 class User
 {
     [CsvColumn("User name")]

@@ -19,7 +19,7 @@ https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv
 You can alternatively install a specific version:
 
 ```
-https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv#1.0.0
+https://github.com/Sov3rain/Uni-CSV.git?path=/Assets/uni-csv#1.2.0
 ```
 
 ## Usage

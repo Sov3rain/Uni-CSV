@@ -33,7 +33,8 @@ You can parse a string using:
 ```c#
 CsvParser.ParseFromString(
     string data, 
-    bool header = true, 
+    bool hasHeader,
+    bool removeHeader = true,
     Delimiter delimiter = Delimiter.Auto)
 ```
 
@@ -42,8 +43,9 @@ or a file using:
 ```c#
 CsvParser.ParseFromPath(
     string path,
-    Delimiter delimiter = Delimiter.Auto,
-    bool header = true,
+    bool hasHeader,
+    bool removeHeader = true,
+    Delimiter delimiter = Delimiter.Auto,
     Encoding encoding = null)
 ```
 
@@ -56,12 +58,14 @@ You can map your CSV to a concrete type using generic methods, which will return
 ```c#
 CsvParser.ParseFromString<T>(
     string data,
+    bool hasHeader,
     Delimiter delimiter = Delimiter.Auto)
 ```
 
 ```c#
 CsvParser.ParseFromPath<T>(
     string path,
+    bool hasHeader,
     Delimiter delimiter = Delimiter.Auto,
     Encoding = null)
 ```
@@ -73,7 +77,7 @@ CsvParser.ParseFromPath<T>(
 Getting back a `List<LIst<string>>`:
 
 ```c#
-var sheet = CsvParser.ParseFromString(csvString);
+var sheet = CsvParser.ParseFromString(csvString, hasHeader: true);
 
 foreach (var row in sheet)
 {
@@ -90,7 +94,7 @@ class User
     public string Email { get; set; }
 }
 
-var users = CsvParser.ParseFromString<User>(csvString);
+var users = CsvParser.ParseFromString<User>(csvString, hasHeader: true);
 
 foreach (User user in users)
 {
@@ -110,7 +114,7 @@ class User
     public string Email { get; set; }
 }
 
-var users = CsvParser.ParseFromString<User>(csvString);
+var users = CsvParser.ParseFromString<User>(csvString, hasHeader: true);
 ```
 
 Both attributes can be mixed in a class, but **name-based mapping will be prioritized**.

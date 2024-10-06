@@ -84,12 +84,29 @@ foreach (var row in sheet)
 Getting back a mapped collection of objects:
 
 ```c#
+class User 
+{
+    public string Username { get; set; }
+}
+
 var users = CSVParser.ParseFromString<User>(csvString);
 
 foreach (User user in users)
 {
     Debug.Log(user.Username);    
 }
+```
+
+If the names in the header row don’t match your property names or contain reserved or invalid characters, you can manually map the property to the correct header using the `[CsvColumn(name)]` attribute:
+
+```ag-0-1i9gpriotag-1-1i9gpriotc#
+class User
+{
+    [CsvColumn("User name")]
+    public string Username { get; set; }
+}
+
+var users = CSVParser.ParseFromString<User>(csvString);
 ```
 
 ## Specs

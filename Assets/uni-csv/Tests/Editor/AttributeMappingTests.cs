@@ -34,7 +34,7 @@ namespace UniCSV.Tests
         public void ParseFromString_WithAttributes_MapsCorrectly()
         {
             string csvData = "FirstName,YearsOld,Country\nJohn,25,USA";
-            var result = CsvParser.ParseFromString<PersonWithAttributes>(csvData).ToList();
+            var result = CsvParser.ParseFromString<PersonWithAttributes>(csvData, hasHeader: true).ToList();
 
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual("John", result[0].Name);
@@ -46,7 +46,7 @@ namespace UniCSV.Tests
         public void ParseFromString_WithAttributes_HandlesEmptyValues()
         {
             string csvData = "FirstName,YearsOld,Country\n,25,\nJane,,UK";
-            var result = CsvParser.ParseFromString<PersonWithAttributes>(csvData).ToList();
+            var result = CsvParser.ParseFromString<PersonWithAttributes>(csvData, hasHeader: true).ToList();
 
             Assert.AreEqual(2, result.Count);
 
@@ -63,7 +63,7 @@ namespace UniCSV.Tests
         public void ParseFromString_HandlesNullableTypes()
         {
             string csvData = "Int,Decimal,String\n,,\nInvalid,Invalid,Value";
-            var result = CsvParser.ParseFromString<NullableTypesClass>(csvData).ToList();
+            var result = CsvParser.ParseFromString<NullableTypesClass>(csvData, hasHeader: true).ToList();
 
             Assert.AreEqual(1, result.Count);
             Assert.IsNull(result[0].NullableInt);

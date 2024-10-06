@@ -16,66 +16,95 @@ namespace UniCSV
         /// </summary>
         /// <param name="path">CSV file path.</param>
         /// <param name="delimiter">Delimiter.</param>
-        /// <param name="header">Does this CSV file have a header row</param>
+        /// <param name="hasHeader">Does this CSV file have a header row</param>
         /// <param name="removeHeader">Remove header row from the result</param>
         /// <param name="encoding">Type of text encoding. (default UTF-8)</param>
         public static List<List<string>> ParseFromPath(
             string path,
-            Delimiter delimiter = Auto,
-            bool header = true,
+            bool hasHeader,
             bool removeHeader = true,
+            Delimiter delimiter = Auto,
             Encoding encoding = null)
         {
             encoding ??= Encoding.UTF8;
             var data = File.ReadAllText(path, encoding);
 
-            return ParseFromString(data, header, removeHeader, delimiter);
+            return ParseFromString(data, hasHeader, removeHeader, delimiter);
         }
 
         /// <summary>
         /// Load CSV data from a specified path. Input file must have a header row.
         /// </summary>
         /// <param name="path">CSV file path.</param>
+        /// <param name="hasHeader">Does this CSV file have a header row</param>
         /// <param name="delimiter">Delimiter.</param>
         /// <param name="encoding">Type of text encoding. (default UTF-8)</param>
         public static IEnumerable<T> ParseFromPath<T>(
             string path,
+            bool hasHeader,
             Delimiter delimiter = Auto,
             Encoding encoding = null)
         {
             encoding ??= Encoding.UTF8;
             var data = File.ReadAllText(path, encoding);
 
-            return ParseFromString<T>(data, delimiter);
+            return ParseFromString<T>(data, hasHeader, delimiter);
         }
 
         /// <summary>
         /// Load CSV data from string. Input string must have a header row.
         /// </summary>
         /// <param name="data">CSV string</param>
+        /// <param name="hasHeader">Does this CSV file have a header row</param>
         /// <param name="delimiter">Delimiter.</param>
-        public static IEnumerable<T> ParseFromString<T>(string data, Delimiter delimiter = Auto)
+        public static IEnumerable<T> ParseFromString<T>(string data, bool hasHeader, Delimiter delimiter = Auto)
         {
-            var result = ParseFromString(data, true, false, delimiter);
+            var result = ParseFromString(data, hasHeader, false, delimiter);
 
-            if (result.Count <= 1) // If we only have a header row or empty data
+            if (hasHeader && result.Count <= 1) // If we only have a header row or empty data
                 yield break;
 
-            var headers = result[0];
-            var properties = typeof(T).GetProperties().ToDictionary(
-                prop => prop.GetCustomAttribute<CsvColumnAttribute>()?.Name ?? prop.Name,
-                prop => prop
-            );
+            var headers = hasHeader && result.Count > 0 ? result[0] : null;
+            var properties = typeof(T).GetProperties();
+            var propertyMap = new Dictionary<int, PropertyInfo>();
 
-            // Start from index 1 to skip the header row
-            for (var i = 1; i < result.Count; i++)
+            // Map by header name first if headers exist
+            if (headers is not null)
+            {
+                var nameBasedProperties = properties.ToDictionary(
+                    prop => prop.GetCustomAttribute<CsvColumnAttribute>()?.Name ?? prop.Name,
+                    prop => prop
+                );
+
+                for (int i = 0; i < headers.Count; i++)
+                {
+                    if (nameBasedProperties.TryGetValue(headers[i], out PropertyInfo prop))
+                    {
+                        propertyMap[i] = prop;
+                    }
+                }
+            }
+
+            foreach (var prop in properties)
+            {
+                // Check for index-based mapping
+                var indexAttr = prop.GetCustomAttribute<CsvColumnIndexAttribute>();
+                if (indexAttr != null && !propertyMap.ContainsValue(prop))
+                {
+                    propertyMap[indexAttr.Index] = prop;
+                }
+            }
+            
+            var startRow = hasHeader ? 1 : 0;
+
+            for (var i = startRow; i < result.Count; i++)
             {
                 var row = result[i];
                 T obj = Activator.CreateInstance<T>();
 
-                for (int j = 0; j < headers.Count && j < row.Count; j++)
+                for (int j = 0; j < row.Count; j++)
                 {
-                    if (properties.TryGetValue(headers[j], out PropertyInfo prop))
+                    if (propertyMap.TryGetValue(j, out PropertyInfo prop))
                     {
                         var value = ConvertValue(row[j], prop.PropertyType);
                         prop.SetValue(obj, value);
@@ -90,12 +119,12 @@ namespace UniCSV
         /// Load CSV data from string.
         /// </summary>
         /// <param name="data">CSV string</param>
-        /// <param name="header">Does this CSV file have a header row</param>
+        /// <param name="hasHeader">Does this CSV file have a header row</param>
         /// <param name="removeHeader">Remove header row from the result</param>
         /// <param name="delimiter">Delimiter.</param>
         public static List<List<string>> ParseFromString(
             string data,
-            bool header = true,
+            bool hasHeader,
             bool removeHeader = true,
             Delimiter delimiter = Auto)
         {
@@ -181,12 +210,12 @@ namespace UniCSV
                 AddRow(sheet, ref row);
             }
 
-            if (header && removeHeader && sheet.Count > 0)
+            if (hasHeader && removeHeader && sheet.Count > 0)
             {
                 sheet.RemoveAt(0);
             }
 
-            if (header && !removeHeader && sheet.Count == 1)
+            if (hasHeader && !removeHeader && sheet.Count == 1)
             {
                 sheet.Clear();
             }

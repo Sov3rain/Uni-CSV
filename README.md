@@ -87,6 +87,7 @@ Getting back a mapped collection of objects:
 class User 
 {
     public string Username { get; set; }
+    public string Email { get; set; }
 }
 
 var users = CsvParser.ParseFromString<User>(csvString);
@@ -97,17 +98,22 @@ foreach (User user in users)
 }
 ```
 
-If the names in the header row don’t match your property names or contain reserved or invalid characters, you can manually map the property to the correct header using the `[CsvColumn(name)]` attribute:
+If the names in the header row don’t match your property names or contain reserved or invalid characters, you can manually map the property to the correct header using the `[CsvColumn(name)]` and `[CsvColumnIndex(index)]` attributes:
 
 ```c#
 class User
 {
     [CsvColumn("User name")]
     public string Username { get; set; }
+
+    [CsvColumnIndex(1)]
+    public string Email { get; set; }
 }
 
 var users = CsvParser.ParseFromString<User>(csvString);
 ```
+
+Both attributes can be mixed in a class, but **name-based mapping will be prioritized**.
 
 ## Specs
 

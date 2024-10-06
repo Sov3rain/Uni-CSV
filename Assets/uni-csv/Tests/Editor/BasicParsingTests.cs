@@ -9,7 +9,7 @@ namespace UniCSV.Tests
         public void ParseFromString_CommaDelimited_ReturnsCorrectData()
         {
             string csvData = "Name,Age,Location\nJohn,25,USA\nJane,30,UK";
-            var result = CsvParser.ParseFromString(csvData, delimiter: Delimiter.Comma);
+            var result = CsvParser.ParseFromString(csvData, hasHeader: true, delimiter: Delimiter.Comma);
 
             Assert.AreEqual(2, result.Count);
             Assert.AreEqual("John", result[0][0]);
@@ -21,7 +21,7 @@ namespace UniCSV.Tests
         public void ParseFromString_EmptyFile_ReturnsEmptyList()
         {
             string csvData = "";
-            var result = CsvParser.ParseFromString(csvData);
+            var result = CsvParser.ParseFromString(csvData, hasHeader: true);
 
             Assert.AreEqual(0, result.Count);
         }

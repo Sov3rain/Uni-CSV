@@ -27,14 +27,14 @@ public class CSVExample : MonoBehaviour
         LoadCSV(_usernamesCSV);
         LoadCSV(_csvWithEmptyLines);
 
-        var users = CsvParser.ParseFromString<User>(_usernamesCSV.text).ToList();
+        var users = CsvParser.ParseFromString<User>(_usernamesCSV.text, true).ToList();
     }
 
     private void LoadCSV(TextAsset usernamesCsv)
     {
         try
         {
-            var data = CsvParser.ParseFromString(usernamesCsv.text);
+            var data = CsvParser.ParseFromString(usernamesCsv.text, true);
 
             Debug.Log($"Loaded {data.Count} rows from file");
 

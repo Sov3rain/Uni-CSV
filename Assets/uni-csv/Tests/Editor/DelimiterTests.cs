@@ -9,7 +9,7 @@ namespace UniCSV.Tests
         public void ParseFromString_AutoDetectDelimiter_SemicolonDelimited()
         {
             string csvData = "Name;Age;Location\nJohn;25;USA";
-            var result = CsvParser.ParseFromString(csvData);
+            var result = CsvParser.ParseFromString(csvData, hasHeader: true);
 
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual("John", result[0][0]);
@@ -20,7 +20,7 @@ namespace UniCSV.Tests
         [TestCase("Name|Age|Location\nJohn|25|USA", TestName = "PipeDelimited")]
         public void ParseFromString_AutoDetectDelimiter(string csvData)
         {
-            var result = CsvParser.ParseFromString(csvData);
+            var result = CsvParser.ParseFromString(csvData, hasHeader: true);
 
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual("John", result[0][0]);

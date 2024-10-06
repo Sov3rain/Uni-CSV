@@ -1,6 +1,6 @@
 ﻿{
   "name": "com.sov3rain.uni-csv",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "displayName": "Uni-CSV",
   "description": "Lightweight and efficient CSV parser without dependencies.",
   "unity": "2019.2",

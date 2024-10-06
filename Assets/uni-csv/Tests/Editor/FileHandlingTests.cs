@@ -9,7 +9,7 @@ namespace UniCSV.Tests
         public void ParseFromPath_WithInvalidPath_ThrowsFileNotFoundException()
         {
             Assert.Throws<System.IO.FileNotFoundException>(() =>
-                CsvParser.ParseFromPath("nonexistent.csv"));
+                CsvParser.ParseFromPath("nonexistent.csv", hasHeader: true));
         }
     }
 }

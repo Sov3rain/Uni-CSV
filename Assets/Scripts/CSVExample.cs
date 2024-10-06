@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Sov3rain;
+using UniCSV;
 using UnityEngine;
 
 public class CSVExample : MonoBehaviour
@@ -27,14 +27,14 @@ public class CSVExample : MonoBehaviour
         LoadCSV(_usernamesCSV);
         LoadCSV(_csvWithEmptyLines);
 
-        var users = CSVParser.ParseFromString<User>(_usernamesCSV.text).ToList();
+        var users = CsvParser.ParseFromString<User>(_usernamesCSV.text).ToList();
     }
 
     private void LoadCSV(TextAsset usernamesCsv)
     {
         try
         {
-            var data = CSVParser.ParseFromString(usernamesCsv.text);
+            var data = CsvParser.ParseFromString(usernamesCsv.text);
 
             Debug.Log($"Loaded {data.Count} rows from file");
 

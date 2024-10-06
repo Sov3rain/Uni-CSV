@@ -1,5 +1,5 @@
 {
-    "name": "Sov3rain.Unity-CSV.Editor.Tests",
+    "name": "Sov3rain.UniCSV.Editor.Tests",
     "rootNamespace": "",
     "references": [
         "GUID:a386fc7f936fef84b8c99b8a1802f3b6",

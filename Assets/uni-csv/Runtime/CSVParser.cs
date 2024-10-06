@@ -5,23 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using static Sov3rain.CSVParser.Delimiter;
+using static UniCSV.Delimiter;
 
-namespace Sov3rain
+namespace UniCSV
 {
-    public static class CSVParser
+    public static class CsvParser
     {
-        private static readonly char[] COMMON_DELIMITERS = { ',', '\t', ';', '|' };
-
-        public enum Delimiter
-        {
-            Auto,
-            Comma,
-            Tab,
-            Semicolon,
-            Pipe
-        }
-
         /// <summary>
         /// Load CSV data from a specified path.
         /// </summary>
@@ -112,7 +101,7 @@ namespace Sov3rain
         {
             if (delimiter == Auto)
             {
-                delimiter = DetectDelimiterFromContent(data);
+                delimiter = DelimiterUtils.DetectDelimiterFromContent(data);
             }
 
             ConvertToCrlf(ref data);
@@ -205,31 +194,6 @@ namespace Sov3rain
             return sheet;
         }
 
-        private static Delimiter DetectDelimiterFromContent(string content)
-        {
-            if (string.IsNullOrWhiteSpace(content))
-                return Comma;
-
-            // Get the first non-empty line
-            var firstLine = content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
-                .FirstOrDefault(line => !string.IsNullOrWhiteSpace(line));
-
-            if (string.IsNullOrWhiteSpace(firstLine))
-                return Comma;
-
-            var delimiterCounts = COMMON_DELIMITERS
-                .ToDictionary(d => d, d => firstLine.Count(c => c == d));
-
-            var mostFrequentDelimiter = delimiterCounts
-                .OrderByDescending(kvp => kvp.Value)
-                .First();
-
-            if (mostFrequentDelimiter.Value <= 1)
-                return Comma;
-
-            return CharToDelimiter(mostFrequentDelimiter.Key);
-        }
-
         private static bool IsRowNonEmpty(List<string> row) =>
             row.Count > 0 &&
             row.Any(cell => !string.IsNullOrWhiteSpace(cell));
@@ -251,24 +215,6 @@ namespace Sov3rain
             data = Regex.Replace(data, @"\r\n|\r|\n", "\r\n");
         }
 
-        private static char ToChar(this Delimiter delimiter) => delimiter switch
-        {
-            Comma => ',',
-            Tab => '\t',
-            Semicolon => ';',
-            Pipe => '|',
-            _ => throw new ArgumentException($"Unsupported delimiter: {delimiter}")
-        };
-
-        private static Delimiter CharToDelimiter(char delimiterChar) => delimiterChar switch
-        {
-            ',' => Comma,
-            '\t' => Tab,
-            ';' => Semicolon,
-            '|' => Pipe,
-            _ => Comma
-        };
-
         private static object ConvertValue(string value, Type targetType)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -278,9 +224,6 @@ namespace Sov3rain
 
                 return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
             }
-
-            if (string.IsNullOrWhiteSpace(value))
-                return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
 
             if (targetType == typeof(string))
                 return value;
@@ -302,16 +245,5 @@ namespace Sov3rain
 
             throw new NotSupportedException($"Type {targetType} is not supported for conversion.");
         }
-    }
-}
-
-[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-public class CsvColumnAttribute : Attribute
-{
-    public string Name { get; }
-
-    public CsvColumnAttribute(string name)
-    {
-        Name = name;
     }
 }

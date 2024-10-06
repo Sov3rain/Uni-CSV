@@ -31,7 +31,7 @@ Returns CSV data as `List<List<string>>`.
 You can parse a string using:
 
 ```c#
-CSVParser.ParseFromString(
+CsvParser.ParseFromString(
     string data, 
     bool header = true, 
     Delimiter delimiter = Delimiter.Auto)
@@ -40,7 +40,7 @@ CSVParser.ParseFromString(
 or a file using:
 
 ```c#
-CSVParser.ParseFromPath(
+CsvParser.ParseFromPath(
     string path,
     Delimiter delimiter = Delimiter.Auto,
     bool header = true,
@@ -54,13 +54,13 @@ Both methods have the `header` parameter set to `true` by default. If your CSV f
 You can map your CSV to a concrete type using generic methods, which will return an `IEnumerator<T>`. Keep in mind that for the mapping to work properly, the input string or file **must include a header row** when using these generic methods.
 
 ```c#
-CSVParser.ParseFromString<T>(
+CsvParser.ParseFromString<T>(
     string data,
     Delimiter delimiter = Delimiter.Auto)
 ```
 
 ```c#
-CSVParser.ParseFromPath<T>(
+CsvParser.ParseFromPath<T>(
     string path,
     Delimiter delimiter = Delimiter.Auto,
     Encoding = null)
@@ -73,7 +73,7 @@ CSVParser.ParseFromPath<T>(
 Getting back a `List<LIst<string>>`:
 
 ```c#
-var sheet = CSVParser.ParseFromString(csvString);
+var sheet = CsvParser.ParseFromString(csvString);
 
 foreach (var row in sheet)
 {
@@ -89,7 +89,7 @@ class User
     public string Username { get; set; }
 }
 
-var users = CSVParser.ParseFromString<User>(csvString);
+var users = CsvParser.ParseFromString<User>(csvString);
 
 foreach (User user in users)
 {
@@ -106,7 +106,7 @@ class User
     public string Username { get; set; }
 }
 
-var users = CSVParser.ParseFromString<User>(csvString);
+var users = CsvParser.ParseFromString<User>(csvString);
 ```
 
 ## Specs

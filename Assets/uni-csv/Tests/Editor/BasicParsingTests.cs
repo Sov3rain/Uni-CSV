@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Sov3rain.Tests
+namespace UniCSV.Tests
 {
     [TestFixture]
     public class BasicParsingTests
@@ -9,7 +9,7 @@ namespace Sov3rain.Tests
         public void ParseFromString_CommaDelimited_ReturnsCorrectData()
         {
             string csvData = "Name,Age,Location\nJohn,25,USA\nJane,30,UK";
-            var result = CSVParser.ParseFromString(csvData, delimiter: CSVParser.Delimiter.Comma);
+            var result = CsvParser.ParseFromString(csvData, delimiter: Delimiter.Comma);
 
             Assert.AreEqual(2, result.Count);
             Assert.AreEqual("John", result[0][0]);
@@ -21,7 +21,7 @@ namespace Sov3rain.Tests
         public void ParseFromString_EmptyFile_ReturnsEmptyList()
         {
             string csvData = "";
-            var result = CSVParser.ParseFromString(csvData);
+            var result = CsvParser.ParseFromString(csvData);
 
             Assert.AreEqual(0, result.Count);
         }

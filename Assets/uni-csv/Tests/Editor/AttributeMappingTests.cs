@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 
-namespace Sov3rain.Tests
+namespace UniCSV.Tests
 {
     [TestFixture]
     public class AttributeMappingTests
@@ -34,7 +34,7 @@ namespace Sov3rain.Tests
         public void ParseFromString_WithAttributes_MapsCorrectly()
         {
             string csvData = "FirstName,YearsOld,Country\nJohn,25,USA";
-            var result = CSVParser.ParseFromString<PersonWithAttributes>(csvData).ToList();
+            var result = CsvParser.ParseFromString<PersonWithAttributes>(csvData).ToList();
 
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual("John", result[0].Name);
@@ -46,7 +46,7 @@ namespace Sov3rain.Tests
         public void ParseFromString_WithAttributes_HandlesEmptyValues()
         {
             string csvData = "FirstName,YearsOld,Country\n,25,\nJane,,UK";
-            var result = CSVParser.ParseFromString<PersonWithAttributes>(csvData).ToList();
+            var result = CsvParser.ParseFromString<PersonWithAttributes>(csvData).ToList();
 
             Assert.AreEqual(2, result.Count);
 
@@ -63,7 +63,7 @@ namespace Sov3rain.Tests
         public void ParseFromString_HandlesNullableTypes()
         {
             string csvData = "Int,Decimal,String\n,,\nInvalid,Invalid,Value";
-            var result = CSVParser.ParseFromString<NullableTypesClass>(csvData).ToList();
+            var result = CsvParser.ParseFromString<NullableTypesClass>(csvData).ToList();
 
             Assert.AreEqual(1, result.Count);
             Assert.IsNull(result[0].NullableInt);

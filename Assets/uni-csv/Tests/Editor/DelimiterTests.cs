@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Sov3rain.Tests
+namespace UniCSV.Tests
 {
     [TestFixture]
     public class DelimiterTests
@@ -9,7 +9,7 @@ namespace Sov3rain.Tests
         public void ParseFromString_AutoDetectDelimiter_SemicolonDelimited()
         {
             string csvData = "Name;Age;Location\nJohn;25;USA";
-            var result = CSVParser.ParseFromString(csvData);
+            var result = CsvParser.ParseFromString(csvData);
 
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual("John", result[0][0]);
@@ -20,7 +20,7 @@ namespace Sov3rain.Tests
         [TestCase("Name|Age|Location\nJohn|25|USA", TestName = "PipeDelimited")]
         public void ParseFromString_AutoDetectDelimiter(string csvData)
         {
-            var result = CSVParser.ParseFromString(csvData);
+            var result = CsvParser.ParseFromString(csvData);
 
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual("John", result[0][0]);

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace Sov3rain.Tests
+namespace UniCSV.Tests
 {
     [TestFixture]
     public class FileHandlingTests
@@ -9,7 +9,7 @@ namespace Sov3rain.Tests
         public void ParseFromPath_WithInvalidPath_ThrowsFileNotFoundException()
         {
             Assert.Throws<System.IO.FileNotFoundException>(() =>
-                CSVParser.ParseFromPath("nonexistent.csv"));
+                CsvParser.ParseFromPath("nonexistent.csv"));
         }
     }
 }
